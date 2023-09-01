@@ -1,9 +1,14 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import torch
+import os
+
+# Get the absolute path of the script's directory
+script_dir = os.path.dirname(os.path.abspath(__file__))
+csv_path = os.path.join(script_dir, "day_head_circumference.csv")
 
 # Read the CSV file using pandas
-df = pd.read_csv("day_head_circumference.csv")
+df = pd.read_csv(csv_path)
 
 # Extract the 'day' and 'head circumference' columns
 x_train = df["# day"].values.reshape(-1, 1)
@@ -44,7 +49,7 @@ def main():
         optimizer.step()
 
         # Print the loss for every few epochs
-        if (epoch + 1) % 10 == 0:
+        if (epoch + 1) % 10000 == 0:
             print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item()}")
 
     # Print model variables and loss

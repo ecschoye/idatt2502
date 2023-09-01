@@ -1,9 +1,14 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import torch
+import os
+
+# Get the absolute path of the script's directory
+script_dir = os.path.dirname(os.path.abspath(__file__))
+csv_path = os.path.join(script_dir, "day_length_weight.csv")
 
 # Read the CSV file using pandas
-df = pd.read_csv("day_length_weight.csv")
+df = pd.read_csv(csv_path)
 
 # Print the column names
 print(df.columns)
@@ -49,7 +54,7 @@ def main():
         optimizer.step()
 
         # Print the loss for every few epochs
-        if (epoch + 1) % 10 == 0:
+        if (epoch + 1) % 10000 == 0:
             print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item()}")
 
     # Print model variables and loss
