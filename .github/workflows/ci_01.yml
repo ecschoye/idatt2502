@@ -1,0 +1,39 @@
+name: Continuous Integration - Folder 01
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '01/**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: pip install -r 01/requirements.txt
+
+      - name: Run task A
+        working-directory: 01/A
+        run: python task_A.py
+
+      - name: Run task B
+        working-directory: 01/B
+        run: python task_B.py
+
+      - name: Run task C
+        working-directory: 01/C
+        run: python task_C.py
