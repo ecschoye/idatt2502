@@ -42,7 +42,7 @@ def main():
         optimizer.step()
 
         # Print the loss for every few epochs
-        if (epoch + 1) % 10 == 0:
+        if (epoch + 1) % 1000 == 0:
             print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item()}")
 
     # Test the model using test data
