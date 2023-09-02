@@ -33,52 +33,62 @@ The candidate must be able to find and adapt solutions to new problems based on 
 
 ## Prerequisites
 
-- Python:
+- **Python:**
   
-  Ensure that you have Python installed on your machine.
-  You can download and install Python from the [official Python site](https://www.python.org).
+  Ensure that you have Python installed on your machine. You can download and install Python from the [official Python site](https://www.python.org).
   
-- Pip:
+- **Pip:**
   
-  Check if Pip is installed. Pip is typically installed alongside Python.
+  Check if Pip is installed. Pip is typically installed alongside Python. You can verify its installation by running the command ```pip --version``` in your terminal or command prompt.
   
-  You can verify its installation by running the command ```pip --version``` in your terminal or command prompt.
+- **Make:**
+
+  The Makefile approach is used for installing and running tasks. Make is a build automation tool commonly found on Unix-like operating systems. You can verify its installation by running the command ```make --version``` in your terminal or command prompt.
 
 
-## Installation and Running
+## Installation and Running with Makefile
 
-To install and run any of the task folders, follow these steps:
+To install and run tasks using the Makefile approach, follow these steps:
 
-1. Clone or download the repository to your local machine.
+- **Step 1: Clone or Download Repository**
+  1. Clone or download the repository to your local machine.
 
-2. Navigate to the root directory of the project where the `requirements.txt` file is located.
+- **Step 2: Navigate to Cloned Folder**
+  1. Open a terminal window.
+  2. Navigate to the cloned repository folder.
 
-3. Create a virtual environment (optional but recommended) to keep the dependencies isolated:
+- **Step 3: Follow the Instructions**
+  1. Inside the terminal, follow the instructions step by step.
 
-   - Run the command to create a virtual environment (assuming you have venv installed):
+### Running tasks
 
-     For Windows:
-     ```batch
-     myenv\Scripts\activate
-     ```
+To run specific tasks within the task folder, use these steps:
 
-     For macOS/Linux:
+- **Step 1: Navigating to the Task Folder**
+  1. Open a terminal window.
+  2. Navigate to the specific folder (e.g., `01`) using the command:
      ```bash
-     source myenv/bin/activate
+     cd 01
      ```
 
-4. Install the project dependencies using pip and the requirements.txt file:
-   ```shell
-   pip install -r requirements.txt
-   ```
-   This command will install all the required packages specified in the requirements.txt file.
+- **Step 2: Installing Dependencies**
+  1. Inside the folder, install required packages from `requirements.txt`:
+     ```bash
+     make install
+     ```
 
-5. Choose the task folder you want to run (e.g., folder 01).
+- **Step 3: Running tasks using Makefile**
+  1. Run a specific task (e.g., task A) using the command:
+     ```bash
+     make run_task folder=A
+     ```
+     Replace `A` with the task identifier.
 
-6. Navigate into the task folder:
-   ```shell
-   cd 01
-   ```
-7. Run the desired task.
+- **Step 4: Cleaning Up**
+  1. To remove virtual environment and installed packages, run:
+     ```bash
+     make clean
+     ```
 
-Repeat these steps for any other task folders you want to install and run.
+These steps should help organize and present the installation and running process in a clear and user-friendly manner.
+
