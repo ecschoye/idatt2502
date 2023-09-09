@@ -42,8 +42,13 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
         # Second Max-pooling
         self.second_maxpool_layer = nn.MaxPool2d(kernel_size=2)
 
-        # Fully connected dense layer
-        self.fc_dense_layer = nn.Linear(64 * 7 * 7, 10)
+        # Fully connected layer
+        self.fully_connected_dense_layer = nn.Linear(64 * 7 * 7, 1024)
+
+        # Second fully connected layer
+        self.second_fc_dense_layer = nn.Linear(1024, 10)
+
+        # self.dense = nn.Linear(32 * 14 * 14, 10)
 
     def logits(self, x):
         x = self.first_conv_layer(x)
@@ -52,7 +57,9 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
         x = self.second_conv_layer(x)
         x = self.second_maxpool_layer(x)
 
-        return self.fc_dense_layer(x.reshape(-1, 64 * 7 * 7))
+        x = self.fully_connected_dense_layer(x.reshape(-1, 64 * 7 * 7))
+
+        return self.second_fc_dense_layer(x.reshape(-1, 1024))
 
     # Predictor
     def f(self, x):
@@ -69,10 +76,11 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
 
 model = ConvolutionalNeuralNetworkModel()
 
-accuracy_list = []
-
 # Optimize: adjust W and b to minimize loss using stochastic gradient descent
 optimizer = torch.optim.Adam(model.parameters(), 0.001)
+
+accuracy_list = []
+
 for epoch in range(20):
     for batch in range(len(x_train_batches)):
         model.loss(x_train_batches[batch], y_train_batches[batch]).backward()  # Compute loss gradients
@@ -81,6 +89,7 @@ for epoch in range(20):
 
     print(f"accuracy = {model.accuracy(x_test, y_test).item() * 100:.2f}%")
     accuracy_list.append(model.accuracy(x_test, y_test))
+
 average_accuracy = sum(accuracy_list) / len(accuracy_list)
 print("average accuracy: {:.2f}%".format(average_accuracy * 100))
 print("done")
