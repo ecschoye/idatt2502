@@ -2,17 +2,20 @@ import torch
 import torch.nn as nn
 import torchvision
 
+print(torch.cuda.is_available())
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("Using device:", device)
+
 # Load observations from the mnist dataset. The observations are divided into a training set and a test set
 mnist_train = torchvision.datasets.MNIST('./data', train=True, download=True)
-x_train = mnist_train.data.reshape(-1, 1, 28,
-                                   28).float()  # torch.functional.nn.conv2d argument must include channels (1)
-y_train = torch.zeros((mnist_train.targets.shape[0], 10))  # Create output tensor
-y_train[torch.arange(mnist_train.targets.shape[0]), mnist_train.targets] = 1  # Populate output
+x_train = mnist_train.data.reshape(-1, 1, 28, 28).float().to(device)
+y_train = torch.zeros((mnist_train.targets.shape[0], 10)).to(device)
+y_train[torch.arange(mnist_train.targets.shape[0]), mnist_train.targets] = 1
 
 mnist_test = torchvision.datasets.MNIST('./data', train=False, download=True)
-x_test = mnist_test.data.reshape(-1, 1, 28, 28).float()  # torch.functional.nn.conv2d argument must include channels (1)
-y_test = torch.zeros((mnist_test.targets.shape[0], 10))  # Create output tensor
-y_test[torch.arange(mnist_test.targets.shape[0]), mnist_test.targets] = 1  # Populate output
+x_test = mnist_test.data.reshape(-1, 1, 28, 28).float().to(device)
+y_test = torch.zeros((mnist_test.targets.shape[0], 10)).to(device)
+y_test[torch.arange(mnist_test.targets.shape[0]), mnist_test.targets] = 1
 
 # Normalization of inputs
 mean = x_train.mean()
@@ -74,7 +77,7 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
         return torch.mean(torch.eq(self.f(x).argmax(1), y.argmax(1)).float())
 
 
-model = ConvolutionalNeuralNetworkModel()
+model = ConvolutionalNeuralNetworkModel().to(device)
 
 # Optimize: adjust W and b to minimize loss using stochastic gradient descent
 optimizer = torch.optim.Adam(model.parameters(), 0.001)
@@ -83,12 +86,12 @@ accuracy_list = []
 
 for epoch in range(20):
     for batch in range(len(x_train_batches)):
-        model.loss(x_train_batches[batch], y_train_batches[batch]).backward()  # Compute loss gradients
+        model.loss(x_train_batches[batch].to(device), y_train_batches[batch].to(device)).backward()  # Compute loss gradients
         optimizer.step()  # Perform optimization by adjusting W and b,
         optimizer.zero_grad()  # Clear gradients for next step
 
-    print(f"accuracy = {model.accuracy(x_test, y_test).item() * 100:.2f}%")
-    accuracy_list.append(model.accuracy(x_test, y_test))
+    print(f"accuracy = {model.accuracy(x_test.to(device), y_test.to(device)).item() * 100:.2f}%")
+    accuracy_list.append(model.accuracy(x_test.to(device), y_test.to(device)))
 
 average_accuracy = sum(accuracy_list) / len(accuracy_list)
 print("average accuracy: {:.2f}%".format(average_accuracy * 100))
