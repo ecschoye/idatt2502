@@ -3,8 +3,13 @@ import torch.nn as nn
 import torchvision
 import matplotlib.pyplot as plt
 
-print(torch.cuda.is_available())
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+if torch.cuda.is_available():
+    device = torch.device("cuda")
+elif torch.backends.mps.is_available():
+    device = torch.device("mps")
+else:
+    device = torch.device("cpu")
+
 print("Using device:", device)
 
 # Load observations from the mnist dataset. The observations are divided into a training set and a test set
